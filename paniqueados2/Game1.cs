@@ -18,9 +18,13 @@ namespace paniqueados2
         private Vector2 posicionPlayer;
         private Vector2 posicionPlayerAnte;
 
-        int contador=0;
+        float time;
+        Int32 PosBalaX = 0;
+        Int32 PosBalaY = 0;
+        Int32 velocidadBala = 10;
+        bool visible = false;
+        int contador = 0;
         int a = 0;
-        private bool press = false;
 
         historyLine[] _historyLine = new historyLine[7000];
 
@@ -112,49 +116,55 @@ namespace paniqueados2
         protected override void Update(GameTime gameTime)
         {
             contador++;
+            time = contador / 1000;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             LimitMap();
 
+
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
 
 
-                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-                _historyLine[a] = _historyLineDraw;
+            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
 
+            _historyLine[a] = _historyLineDraw;
+       
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                visible = true;
+                            Disparar();
+
+            }
+            else
+            {
+                visible = false;
+
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-            posicionPlayerAnte = posicionPlayer;
 
+                posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.X += 6;
 
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 posicionPlayerAnte = posicionPlayer;
-
-
                 posicionPlayer.X -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 posicionPlayerAnte = posicionPlayer;
-
-
                 posicionPlayer.Y -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 posicionPlayerAnte = posicionPlayer;
-
                 posicionPlayer.Y += 6;
             }
-
-
-
 
             base.Update(gameTime);
         }
@@ -163,19 +173,14 @@ namespace paniqueados2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-
-
             string playerX = "";
             string playerY = "";
             Vector2 position2 = new Vector2(10, 10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
-
-
-
             _spriteBatch.Begin();
-                _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
-            
+            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
+
             ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
@@ -190,37 +195,26 @@ namespace paniqueados2
             base.Draw(gameTime);
         }
 
-        int delay = 6 * 10; // ticks to delay for
-        int cooldown = 0;
-
-        public void loop()
+        private void Disparar()
         {
-
-            if (press == true)
+            if (visible == true)
             {
-                if (cooldown <= 0)
+                if (PosBalaX <= (Window.ClientBounds.Width - _textura.Width))
                 {
-                    cooldown = delay;
-
+                    PosBalaX += velocidadBala;
                 }
-
+                else
+                {
+                    PosBalaX = (int)posicionPlayer.X;
+                    PosBalaY = (int)posicionPlayer.Y;
+                    visible = false;
+                }
             }
-
-            if (cooldown > 0)
+            else
             {
-                drawing();
-                cooldown -= 1;
-
-
+                PosBalaX = (int)posicionPlayer.X;
+                PosBalaY = (int)posicionPlayer.Y;
             }
-
-        }
-        public void drawing()
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
-
-            _spriteBatch.End();
         }
     }
 
