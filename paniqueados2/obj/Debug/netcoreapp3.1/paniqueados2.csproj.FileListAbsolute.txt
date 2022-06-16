@@ -26,3 +26,4 @@ C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\puntito.xnb
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.spritefont
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.xnb
+C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\rastro.xnb
