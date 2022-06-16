@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\book\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\book\\.nuget\\packages"
+      "C:\\Users\\fedot\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\fedot\\.nuget\\packages"
     ]
   }
 }

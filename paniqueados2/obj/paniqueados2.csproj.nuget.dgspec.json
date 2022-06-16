@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\book\\Downloads\\paniqueado\\paniqueados2\\paniqueados2.csproj": {}
+    "C:\\Users\\fedot\\OneDrive\\Escritorio\\paniqueado\\paniqueados2\\paniqueados2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\book\\Downloads\\paniqueado\\paniqueados2\\paniqueados2.csproj": {
+    "C:\\Users\\fedot\\OneDrive\\Escritorio\\paniqueado\\paniqueados2\\paniqueados2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\book\\Downloads\\paniqueado\\paniqueados2\\paniqueados2.csproj",
+        "projectUniqueName": "C:\\Users\\fedot\\OneDrive\\Escritorio\\paniqueado\\paniqueados2\\paniqueados2.csproj",
         "projectName": "paniqueados2",
-        "projectPath": "C:\\Users\\book\\Downloads\\paniqueado\\paniqueados2\\paniqueados2.csproj",
-        "packagesPath": "C:\\Users\\book\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\book\\Downloads\\paniqueado\\paniqueados2\\obj\\",
+        "projectPath": "C:\\Users\\fedot\\OneDrive\\Escritorio\\paniqueado\\paniqueados2\\paniqueados2.csproj",
+        "packagesPath": "C:\\Users\\fedot\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\fedot\\OneDrive\\Escritorio\\paniqueado\\paniqueados2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\book\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\fedot\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -59,22 +59,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.10, 3.1.10]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.1.25, 3.1.25]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.409\\RuntimeIdentifierGraph.json"
         }
       }
     }
