@@ -18,9 +18,11 @@ namespace paniqueados2
         private Vector2 posicionPlayer;
         private Vector2 posicionPlayerAnte;
 
+        int contador=0;
         int a = 0;
         private bool press = false;
 
+        historyLine[] _historyLine = new historyLine[7000];
 
 
         public List<Vector2> pixelScreen = new List<Vector2>();
@@ -68,6 +70,14 @@ namespace paniqueados2
 
         protected override void Initialize()
         {
+            posicionPlayerAnte = posicionPlayer;
+
+
+            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+
+            _historyLine[0] = _historyLineDraw;
+            _historyLine[1] = _historyLineDraw;
+
             pixelScreen.Add(posicionPlayer);
 
             pixel = new Texture2D(GraphicsDevice, 1, 1);
@@ -77,7 +87,6 @@ namespace paniqueados2
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             base.Initialize();
-            historyLine hola= new historyLine(pixel,posicionPlayer);
 
         }
 
@@ -102,6 +111,8 @@ namespace paniqueados2
 
         protected override void Update(GameTime gameTime)
         {
+            contador++;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -110,39 +121,43 @@ namespace paniqueados2
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                pixelScreen.Add(posicionPlayer);
-
-
-                press = true;
-            }
-            else
-            {
-                press = false;
-            }
-
 
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-
                 posicionPlayerAnte = posicionPlayer;
+
+                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+                _historyLine[a] = _historyLineDraw;
+
+                a++;
                 posicionPlayer.X += 6;
+
+                _historyLine[a] = _historyLineDraw;
+
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 posicionPlayerAnte = posicionPlayer;
+
+                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+                _historyLine[a] = _historyLineDraw;
                 posicionPlayer.X -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 posicionPlayerAnte = posicionPlayer;
+
+                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+                _historyLine[a] = _historyLineDraw;
                 posicionPlayer.Y -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 posicionPlayerAnte = posicionPlayer;
+
+                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+                _historyLine[a] = _historyLineDraw;
 
                 posicionPlayer.Y += 6;
             }
@@ -158,33 +173,29 @@ namespace paniqueados2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
- string playerX="";
- string playerY="" ;
-             Vector2 position2 = new Vector2(10,10);
+
+
+            string playerX = "";
+            string playerY = "";
+            Vector2 position2 = new Vector2(10, 10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
+
+
+
             _spriteBatch.Begin();
-
-
-            if (a + 1 < pixelScreen.Count)
+            if(a< contador)
             {
-                a++;
-
-            }   
-            _spriteBatch.Draw(pixel, new Rectangle((int)pixelScreen[a].X, (int)pixelScreen[a].Y, 10, 10), Color.Red);         ///Texto
-                
-            Action<int> action = new Action<int>(drawing);
-
-
-
+                _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
+            }
+            ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
-                         _spriteBatch.Draw(_textura, _rectangule, Color.White);
-
-            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY+ "Array:" + pixelScreen[a] , position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.Draw(_textura, _rectangule, Color.White);
+            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine[a].getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             ///PUNTO
-         
+
             _spriteBatch.End();
 
 
@@ -209,17 +220,19 @@ namespace paniqueados2
 
             if (cooldown > 0)
             {
-                a++;
+                drawing();
                 cooldown -= 1;
 
 
             }
 
         }
-        public void drawing(int posicion)
-        {  _spriteBatch.Begin();
-   
-              _spriteBatch.End();
+        public void drawing()
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
+
+            _spriteBatch.End();
         }
     }
 
