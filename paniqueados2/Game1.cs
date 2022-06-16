@@ -122,42 +122,33 @@ namespace paniqueados2
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
 
 
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                posicionPlayerAnte = posicionPlayer;
-
                 historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
                 _historyLine[a] = _historyLineDraw;
 
-                a++;
-                posicionPlayer.X += 6;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+            posicionPlayerAnte = posicionPlayer;
 
-                _historyLine[a] = _historyLineDraw;
+                posicionPlayer.X += 6;
 
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 posicionPlayerAnte = posicionPlayer;
 
-                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-                _historyLine[a] = _historyLineDraw;
+
                 posicionPlayer.X -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 posicionPlayerAnte = posicionPlayer;
 
-                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-                _historyLine[a] = _historyLineDraw;
+
                 posicionPlayer.Y -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 posicionPlayerAnte = posicionPlayer;
-
-                historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-                _historyLine[a] = _historyLineDraw;
 
                 posicionPlayer.Y += 6;
             }
@@ -167,7 +158,6 @@ namespace paniqueados2
 
             base.Update(gameTime);
         }
-        Random rnd = new Random();
 
         protected override void Draw(GameTime gameTime)
         {
@@ -184,10 +174,8 @@ namespace paniqueados2
 
 
             _spriteBatch.Begin();
-            if(a< contador)
-            {
                 _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
-            }
+            
             ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
