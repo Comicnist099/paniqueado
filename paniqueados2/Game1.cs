@@ -37,7 +37,6 @@ namespace paniqueados2
 
         Texture2D pixel;
 
-
         public void LimitMap()
         {
             if (posicionPlayer.X <= 0)
@@ -78,6 +77,8 @@ namespace paniqueados2
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             base.Initialize();
+            historyLine hola= new historyLine(pixel,posicionPlayer);
+
         }
 
         protected override void LoadContent()
