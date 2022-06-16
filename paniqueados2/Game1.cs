@@ -25,8 +25,6 @@ namespace paniqueados2
 
         public List<Vector2> pixelScreen = new List<Vector2>();
 
-
-
         //Rastroo
         private Texture2D _texturaRastro;
         private Rectangle _rectanguleRastro;
@@ -35,9 +33,7 @@ namespace paniqueados2
         int LimitX = 1000;
         int LimitY = 700;
 
-        public int[] pixelScreenX = new int[700000];
 
-        public int[] pixelScreenY = new int[700000];
 
         Texture2D pixel;
 
@@ -115,11 +111,7 @@ namespace paniqueados2
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-
-                pixelScreenX[0]=(int)posicionPlayer.X;
                 pixelScreen.Add(posicionPlayer);
-                
-
 
 
                 press = true;
@@ -165,9 +157,9 @@ namespace paniqueados2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            string playerX = "";
-            string playerY = "";
-            Vector2 position2 = new Vector2(10, 10);
+ string playerX="";
+ string playerY="" ;
+             Vector2 position2 = new Vector2(10,10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
             _spriteBatch.Begin();
@@ -177,22 +169,21 @@ namespace paniqueados2
             {
                 a++;
 
-            }
+            }   
             _spriteBatch.Draw(pixel, new Rectangle((int)pixelScreen[a].X, (int)pixelScreen[a].Y, 10, 10), Color.Red);         ///Texto
-
+                
             Action<int> action = new Action<int>(drawing);
-            Array.ForEach(pixelScreenX, action);
 
 
 
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
-            _spriteBatch.Draw(_textura, _rectangule, Color.White);
+                         _spriteBatch.Draw(_textura, _rectangule, Color.White);
 
-            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + pixelScreen[a], position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY+ "Array:" + pixelScreen[a] , position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             ///PUNTO
-
+         
             _spriteBatch.End();
 
 
@@ -225,10 +216,9 @@ namespace paniqueados2
 
         }
         public void drawing(int posicion)
-        {
-            _spriteBatch.Begin();
-
-            _spriteBatch.End();
+        {  _spriteBatch.Begin();
+   
+              _spriteBatch.End();
         }
     }
 
