@@ -1,6 +1,6 @@
 using System;
 
-namespace paniqueado
+namespace paniqueados2
 {
 #if WINDOWS || XBOX
     static class Program

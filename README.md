@@ -1,2 +1,0 @@
-# paniqueado
- uysss que miedooo

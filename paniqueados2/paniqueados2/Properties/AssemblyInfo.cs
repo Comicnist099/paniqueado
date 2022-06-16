@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("paniqueado")]
-[assembly: AssemblyProduct("paniqueado")]
+[assembly: AssemblyTitle("paniqueados2")]
+[assembly: AssemblyProduct("paniqueados2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // On Windows, the following GUID is for the ID of the typelib if this
 // project is exposed to COM. On other platforms, it unique identifies the
 // title storage container when deploying this assembly to the device.
-[assembly: Guid("699f1af5-a1b2-4174-a0db-a5d81278be98")]
+[assembly: Guid("73a1d4ae-1970-4d12-aea6-1933976f3d6c")]
 
 // Version information for an assembly consists of the following four values:
 //

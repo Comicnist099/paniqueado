@@ -1,19 +1,19 @@
 ﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{699F1AF5-A1B2-4174-A0DB-A5D81278BE98}</ProjectGuid>
+    <ProjectGuid>{73A1D4AE-1970-4D12-AEA6-1933976F3D6C}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>paniqueado</RootNamespace>
-    <AssemblyName>paniqueado</AssemblyName>
+    <RootNamespace>paniqueados2</RootNamespace>
+    <AssemblyName>paniqueados2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>f95a2f24-e6a3-4c0e-ab46-e530b3842696</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>a50c1455-094c-4fb6-b4b5-722687dc94dc</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
@@ -67,8 +67,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\paniqueadoContent\paniqueadoContent.contentproj">
-      <Name>paniqueadoContent</Name>
+    <ProjectReference Include="..\paniqueados2Content\paniqueados2Content.contentproj">
+      <Name>paniqueados2Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
