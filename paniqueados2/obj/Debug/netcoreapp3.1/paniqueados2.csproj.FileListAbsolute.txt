@@ -22,3 +22,7 @@ C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniquea
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.dll
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.pdb
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.genruntimeconfig.cache
+C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\a.xnb
+C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\puntito.xnb
+C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.spritefont
+C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.xnb

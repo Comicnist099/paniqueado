@@ -1,0 +1,4 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/Console.spritefont","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Console.xnb","LocalizedFontProcessor","SpriteFontContent",2426,956,0.4520665
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/File.spritefont","C:\Users\book\Downloads\paniqueado\paniqueados2\Content\bin\DesktopGL\File.spritefont","CopyItem","File",2426,2426,0.0033139
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/puntito.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/puntito.xnb","TextureProcessor","Texture2DContent",129,149,0.1378032
