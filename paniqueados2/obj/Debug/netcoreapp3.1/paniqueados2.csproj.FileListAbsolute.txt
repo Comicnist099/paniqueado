@@ -13,8 +13,6 @@ C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\runtimes
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\soft_oal.dll
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SDL2.dll
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\soft_oal.dll
-C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.csproj.AssemblyReference.cache
-C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.AssemblyInfoInputs.cache
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.AssemblyInfo.cs
 C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.csproj.CoreCompileInputs.cache
@@ -27,3 +25,5 @@ C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.spritefont
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\File.xnb
 C:\Users\book\Downloads\paniqueado\paniqueados2\bin\Debug\netcoreapp3.1\Content\rastro.xnb
+C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.csproj.AssemblyReference.cache
+C:\Users\book\Downloads\paniqueado\paniqueados2\obj\Debug\netcoreapp3.1\paniqueados2.GeneratedMSBuildEditorConfig.editorconfig
