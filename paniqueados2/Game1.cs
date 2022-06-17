@@ -11,12 +11,12 @@ namespace paniqueados2
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-        private Texture2D _textura;
-        private Rectangle _rectangule;
-        private Vector2 posicionPlayer;
-        private Vector2 posicionPlayerAnte;
+        private GraphicsDeviceManager _graphics;    //Usado para cargar gráficos
+        private SpriteBatch _spriteBatch;           //Usado para dibujar texturas
+        private Texture2D _textura;                 //Usado para cargar texturas
+        private Rectangle _rectangule;              //Usado para dibujar en el juego
+        private Vector2 posicionPlayer;             //Posición del jugador 
+        private Vector2 posicionPlayerAnte;         //Posición anterior del jugador
 
         float time;
         Int32 PosBalaX = 0;
@@ -30,11 +30,12 @@ namespace paniqueados2
 
         public List<Vector2> pixelScreen = new List<Vector2>();
 
-        //Rastroo
+        //Rastro
         private Texture2D _texturaRastro;
         private Rectangle _rectanguleRastro;
         SpriteFont font;
 
+        //Límites del campo de juego. Dimensiones.
         int LimitX = 1000;
         int LimitY = 700;
 
@@ -62,20 +63,19 @@ namespace paniqueados2
                 posicionPlayer.Y = LimitY - 10;
             }
         }
+
+        //Constructor. Clase padre de todo, indica cómo empezar.
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-
-
             Content.RootDirectory = "Content";
-
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
+        //Inicializador. Inicializa todo desde el inicio.
         protected override void Initialize()
         {
             posicionPlayerAnte = posicionPlayer;
-
 
             historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
 
@@ -94,13 +94,10 @@ namespace paniqueados2
 
         }
 
+        //Carga métodos que soni usados para el juego.
         protected override void LoadContent()
         {
             int total = LimitX * LimitY;
-
-
-
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             posicionPlayer = new Vector2(0, 0);
             posicionPlayerAnte = new Vector2(0, 0);
@@ -113,16 +110,19 @@ namespace paniqueados2
             // TODO: use this.Content to load your game content here
         }
 
+        //Se actualiza cada segundo, actualiza el estado del juego
         protected override void Update(GameTime gameTime)
         {
             contador++;
             time = contador / 1000;
+            Debug.WriteLine(contador);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //Si se presiona la tecla ESC sale del juego
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)){
                 Exit();
+            }
 
             LimitMap();
-
 
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
@@ -135,17 +135,14 @@ namespace paniqueados2
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 visible = true;
-                            Disparar();
-
+                Disparar();
             }
             else
             {
                 visible = false;
-
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.X += 6;
 
@@ -169,6 +166,7 @@ namespace paniqueados2
             base.Update(gameTime);
         }
 
+        //Es llamado en un intervalor regular para actualizar el estado del juego
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -181,16 +179,14 @@ namespace paniqueados2
             _spriteBatch.Begin();
             _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
 
-            ///Texto
+            //Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
             _spriteBatch.Draw(_textura, _rectangule, Color.White);
             _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine[a].getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
-            ///PUNTO
-
+            //Punto
             _spriteBatch.End();
-
 
             base.Draw(gameTime);
         }
