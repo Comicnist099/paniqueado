@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/a.png</SourceFile>
-  <SourceTime>2022-06-16T00:46:53.2252872-05:00</SourceTime>
-  <DestFile>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/a.xnb</DestFile>
-  <DestTime>2022-06-16T14:25:04.5377025-05:00</DestTime>
+  <SourceFile>D:/Repos/paniqueados4/paniqueados2/Content/a.png</SourceFile>
+  <SourceTime>2022-06-16T18:58:16.0615777-05:00</SourceTime>
+  <DestFile>D:/Repos/paniqueados4/paniqueados2/Content/bin/DesktopGL/Content/a.xnb</DestFile>
+  <DestTime>2022-06-16T18:59:19.4203843-05:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2020-08-10T11:17:54-05:00</ImporterTime>
+  <ImporterTime>2020-08-10T16:17:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2020-08-10T11:17:54-05:00</ProcessorTime>
+  <ProcessorTime>2020-08-10T16:17:54-05:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

@@ -7,8 +7,39 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
+
+
+
+
+
 namespace paniqueados2
 {
+
+    public class Bala {
+    int balaX;
+    int balaY;
+    char estado;
+
+    public Bala(int x, int y) {
+        this.balaX = x;
+        this.balaY = y;
+        estado = 'A';
+    }
+
+    public int getX() {
+        return (this.balaX);
+    }
+
+    public int getY() {
+        return (this.balaY);
+    }
+
+    public void cambiarEstado(char estadoNuevo) {
+        this.estado = estadoNuevo;
+    }
+}
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -19,8 +50,6 @@ namespace paniqueados2
         private Vector2 posicionPlayerAnte;
 
         float time;
-        Int32 PosBalaX = 0;
-        Int32 PosBalaY = 0;
         Int32 velocidadBala = 10;
         bool visible = false;
         int contador = 0;
@@ -30,6 +59,7 @@ namespace paniqueados2
 
 
         public List<Vector2> pixelScreen = new List<Vector2>();
+        List<Bala> balasPantalla = new List<Bala>();
 
         //Rastroo
         private Texture2D _texturaRastro;
@@ -42,6 +72,16 @@ namespace paniqueados2
 
 
         Texture2D pixel;
+
+        public bool verificarRepetido(List<Bala> listabalas, Bala balaAgregar) {
+            bool res = false;
+            for(int i = 0; i < listabalas.Count; i++) {
+                if(balaAgregar.getX() == listabalas[i].getX() && balaAgregar.getY() == listabalas[i].getY()) {
+                    res = true;
+                }
+            }
+            return res;
+        }
 
         public void LimitMap()
         {
@@ -134,33 +174,30 @@ namespace paniqueados2
        
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                visible = true;
-                            Disparar();
-
+                Disparar(balasPantalla);
             }
             else
             {
-                visible = false;
 
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D) )
             {
 
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.X += 6;
 
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            else if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.X -= 6;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.Y -= 6;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            else if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S) )
             {
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.Y += 6;
@@ -178,9 +215,12 @@ namespace paniqueados2
             Vector2 position2 = new Vector2(10, 10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
 
+            _spriteBatch.Begin();
+            for(int i = 0; i < balasPantalla.Count; i++) {
+                _spriteBatch.Draw(pixel, new Rectangle(balasPantalla[i].getX(), balasPantalla[i].getY(), 10, 10), Color.Red);
+            }
+            
             ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
@@ -195,25 +235,14 @@ namespace paniqueados2
             base.Draw(gameTime);
         }
 
-        private void Disparar()
+        private void Disparar(List<Bala> balasPantalla)
         {
-            if (visible == true)
-            {
-                if (PosBalaX <= (Window.ClientBounds.Width - _textura.Width))
-                {
-                    PosBalaX += velocidadBala;
-                }
-                else
-                {
-                    PosBalaX = (int)posicionPlayer.X;
-                    PosBalaY = (int)posicionPlayer.Y;
-                    visible = false;
-                }
+            Bala balaNueva = new Bala((int) posicionPlayer.X, (int) posicionPlayer.Y);
+            if (!verificarRepetido(balasPantalla, balaNueva)) {
+                balasPantalla.Add(balaNueva);
             }
-            else
-            {
-                PosBalaX = (int)posicionPlayer.X;
-                PosBalaY = (int)posicionPlayer.Y;
+            else {
+                
             }
         }
     }

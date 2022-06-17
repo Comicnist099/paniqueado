@@ -4,10 +4,10 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/a.png</File>
-    <File>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/File.spritefont</File>
-    <File>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/puntito.png</File>
-    <File>C:/Users/book/Downloads/paniqueado/paniqueados2/Content/rastro.png</File>
+    <File>D:/Repos/paniqueados4/paniqueados2/Content/a.png</File>
+    <File>D:/Repos/paniqueados4/paniqueados2/Content/File.spritefont</File>
+    <File>D:/Repos/paniqueados4/paniqueados2/Content/puntito.png</File>
+    <File>D:/Repos/paniqueados4/paniqueados2/Content/rastro.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
