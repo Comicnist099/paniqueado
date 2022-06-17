@@ -18,10 +18,15 @@ namespace paniqueados2
         private Vector2 posicionPlayer;
         private Vector2 posicionPlayerAnte;
 
+        float time;
+        Int32 PosBalaX = 0;
+        Int32 PosBalaY = 0;
+        Int32 velocidadBala = 10;
+        bool visible = false;
+        int contador = 0;
         int a = 0;
-        private bool press = false;
 
-
+        historyLine[] _historyLine = new historyLine[7000];
 
         public List<Vector2> pixelScreen = new List<Vector2>();
 
@@ -37,7 +42,7 @@ namespace paniqueados2
 
         Texture2D pixel;
 
-
+        //Se encarga de los límites del espacio disponibles
         public void LimitMap()
         {
             if (posicionPlayer.X <= 0)
@@ -69,6 +74,14 @@ namespace paniqueados2
 
         protected override void Initialize()
         {
+            posicionPlayerAnte = posicionPlayer;
+
+
+            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+
+            _historyLine[0] = _historyLineDraw;
+            _historyLine[1] = _historyLineDraw;
+
             pixelScreen.Add(posicionPlayer);
 
             pixel = new Texture2D(GraphicsDevice, 1, 1);
@@ -78,6 +91,7 @@ namespace paniqueados2
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             base.Initialize();
+
         }
 
         protected override void LoadContent()
@@ -101,33 +115,40 @@ namespace paniqueados2
 
         protected override void Update(GameTime gameTime)
         {
+            contador++;
+            time = contador / 1000;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             LimitMap();
 
+
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Down))
+
+            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
+
+            _historyLine[a] = _historyLineDraw;
+       
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                pixelScreen.Add(posicionPlayer);
+                visible = true;
+                            Disparar();
 
-
-                press = true;
             }
             else
             {
-                press = false;
+                visible = false;
+
             }
-
-
-
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
 
                 posicionPlayerAnte = posicionPlayer;
                 posicionPlayer.X += 6;
+
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
@@ -142,83 +163,58 @@ namespace paniqueados2
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 posicionPlayerAnte = posicionPlayer;
-
                 posicionPlayer.Y += 6;
             }
 
-
-
-
             base.Update(gameTime);
         }
-        Random rnd = new Random();
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
- string playerX="";
- string playerY="" ;
-             Vector2 position2 = new Vector2(10,10);
+            string playerX = "";
+            string playerY = "";
+            Vector2 position2 = new Vector2(10, 10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
             _spriteBatch.Begin();
+            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
 
-
-            if (a + 1 < pixelScreen.Count)
-            {
-                a++;
-
-            }   
-            _spriteBatch.Draw(pixel, new Rectangle((int)pixelScreen[a].X, (int)pixelScreen[a].Y, 10, 10), Color.Red);         ///Texto
-                
-            Action<int> action = new Action<int>(drawing);
-
-
-
+            ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
-                         _spriteBatch.Draw(_textura, _rectangule, Color.White);
-
-            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY+ "Array:" + pixelScreen[a] , position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.Draw(_textura, _rectangule, Color.White);
+            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine[a].getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             ///PUNTO
-         
+
             _spriteBatch.End();
 
 
             base.Draw(gameTime);
         }
 
-        int delay = 6 * 10; // ticks to delay for
-        int cooldown = 0;
-
-        public void loop()
+        private void Disparar()
         {
-
-            if (press == true)
+            if (visible == true)
             {
-                if (cooldown <= 0)
+                if (PosBalaX <= (Window.ClientBounds.Width - _textura.Width))
                 {
-                    cooldown = delay;
-
+                    PosBalaX += velocidadBala;
                 }
-
+                else
+                {
+                    PosBalaX = (int)posicionPlayer.X;
+                    PosBalaY = (int)posicionPlayer.Y;
+                    visible = false;
+                }
             }
-
-            if (cooldown > 0)
+            else
             {
-                a++;
-                cooldown -= 1;
-
-
+                PosBalaX = (int)posicionPlayer.X;
+                PosBalaY = (int)posicionPlayer.Y;
             }
-
-        }
-        public void drawing(int posicion)
-        {  _spriteBatch.Begin();
-   
-              _spriteBatch.End();
         }
     }
 
