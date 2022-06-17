@@ -7,110 +7,9 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Clases;
 
-namespace paniqueados2
-{
-    
-    public class Jugador {
-        Trazo trazo;
-        int posX;
-        int posY;
-
-        public Jugador(Trazo t, int x, int y) {
-            this.trazo = t;
-            this.posX = x;
-            this.posY = y;
-        }
-
-        public int getX() {
-            return this.posX;
-        }
-
-        public int getY() {
-            return this.posY;
-        }
-
-        public Trazo getTrazo() {
-            return this.trazo;
-        }
-
-        public void setX(int x) {
-            this.posX = x;
-        }
-
-        public void setY(int y) {
-            this.posY = y;
-        }
-
-
-    }
-
-    public class Tile {
-        List<int[]> puntos;
-
-        public Tile(List<int[]> origen) {
-            this.puntos = origen;
-        }
-
-        public void agregarPuntos(List<int> nuevosPuntos) {
-            
-        }
-
-        public List<int[]> getPuntos() {
-            return puntos;
-        }
-    }
-
-    public class Trazo {
-        string path;
-        int inicioX;
-        int inicioY;
-        
-        public Trazo() {
-            this.path = "X";
-        }
-
-        public int getX() {
-            return this.inicioX;
-        }
-
-        public int getY() {
-            return this.inicioY;
-        }
-
-        public char backtrack() {
-            int length = this.path.Length - 1;
-            char res = this.path[length];
-            if (res != 'X') { this.path = this.path.Remove(length);}
-            return(res);
-        }
-
-        public void nuevaDireccion(string dir) {
-            this.path +=  dir;
-            if (this.path.Length > 1) {
-                this.borrarRedundantes();
-            }
-        }
-
-        public void borrarRedundantes() {
-            string cadena1 = this.path;
-            string patronRegex1 = "WS|SW";
-            string patronRegex2 = "AD|DA";
-            string vacio = "";
-            cadena1 = Regex.Replace(cadena1, patronRegex1, vacio);
-            string cadenaSinRedundancia = Regex.Replace(cadena1, patronRegex2, vacio);
-            this.path = cadenaSinRedundancia;
-        }
-
-        public string getPath() {
-            return this.path;
-        }
-
-        public Tile terminarTrazo(Tile tileModificado, List<int> listaNueva) {
-            tileModificado.agregarPuntos(listaNueva);
-            return tileModificado;
-        }
-    } 
+namespace paniqueados2 {
 
     public class Game1 : Game
     {
@@ -119,13 +18,14 @@ namespace paniqueados2
         private SpriteBatch _spriteBatch;
         private Texture2D _textura;
         private Rectangle _rectangule;
-        
+        int LimitX = 1000;
+        int LimitY = 700;
+
         Jugador cursorJugador = new Jugador(new Trazo(), 0, 0);
         Vector2 posicionPlayer  = new Vector2(0, 0);
 
         float time;
         int contador = 0;
-        int a = 0;
 
         public List<Vector2> pixelScreen = new List<Vector2>();
 
@@ -134,8 +34,19 @@ namespace paniqueados2
         private Rectangle _rectanguleRastro;
         SpriteFont font;
 
-        int LimitX = 1000;
-        int LimitY = 700;
+        public int[] generarCoords(int LimitX, int LimitY) {
+            int randX = 1;
+            int randY = 1;
+            while (randX % 5 != 0 || randY % 5 != 0) {
+                Random r = new Random();
+                randX = r.Next(0,LimitX-10);
+                randY = r.Next(0,LimitY-10);
+            }
+
+            int[] coords = new int[] { randX, randY };
+             
+            return coords;
+        }
 
         public bool LimitMap()
         {
@@ -198,7 +109,12 @@ namespace paniqueados2
         protected override void LoadContent()
         {
             int total = LimitX * LimitY;
-            
+            int[] coords = generarCoords(LimitX, LimitY);
+
+            cursorJugador.setX(coords[0]);
+            cursorJugador.setX(coords[1]);
+            cursorJugador.getTrazo().setXInicial(cursorJugador.getX());
+            cursorJugador.getTrazo().setYInicial(cursorJugador.getY());
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -236,7 +152,7 @@ namespace paniqueados2
                 cursorJugador.setX( cursorJugador.getX() - 10);
                 if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("A"); }
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 cursorJugador.setY( cursorJugador.getY() - 10);
                 if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("W"); }
@@ -289,9 +205,6 @@ namespace paniqueados2
 
             /// TRAZADO
             Trazo trazo = cursorJugador.getTrazo();
-            
-            
-
 
             string camino = trazo.getPath();
             int x = trazo.getX();
@@ -326,23 +239,12 @@ namespace paniqueados2
             }
 
             _spriteBatch.Draw(_textura, _rectangule, Color.White);
-
-
-            
-            
-
             _spriteBatch.End();
 
 
             base.Draw(gameTime);
         }
 
-        private void Trazar(Trazo trazo)
-        {
-            
-            
-            
-        }
     }
 
 }
