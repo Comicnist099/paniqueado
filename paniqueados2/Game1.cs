@@ -16,32 +16,47 @@ using Microsoft.Xna.Framework.Input;
 namespace paniqueados2
 {
 
-    public class Bala {
-    int balaX;
-    int balaY;
+    public class Tile {
+    int tileX;
+    int tileY;
     char estado;
+    int ancho;
+    int alto;
 
-    public Bala(int x, int y) {
-        this.balaX = x;
-        this.balaY = y;
-        estado = 'A';
-    }
+        public Tile(int x, int y, char s) {
+            this.tileX = x;
+            this.tileY = y;
+            this.estado = s;
+        }
 
-    public int getX() {
-        return (this.balaX);
-    }
+        public int getX() {
+            return (this.tileX);
+        }
 
-    public int getY() {
-        return (this.balaY);
-    }
+        public int getY() {
+            return (this.tileY);
+        }
 
-    public void cambiarEstado(char estadoNuevo) {
-        this.estado = estadoNuevo;
+        public int getAncho() {
+            return (this.ancho);
+        }
+
+        public int getAlto() {
+            return (this.alto);
+        }
+
+        public char getEstado() {
+            return (this.estado);
+        }
+
+        public void cambiarEstado(char estadoNuevo) {
+            this.estado = estadoNuevo;
+        }
     }
-}
 
     public class Game1 : Game
     {
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Texture2D _textura;
@@ -50,8 +65,6 @@ namespace paniqueados2
         private Vector2 posicionPlayerAnte;
 
         float time;
-        Int32 velocidadBala = 10;
-        bool visible = false;
         int contador = 0;
         int a = 0;
 
@@ -59,7 +72,7 @@ namespace paniqueados2
 
 
         public List<Vector2> pixelScreen = new List<Vector2>();
-        List<Bala> balasPantalla = new List<Bala>();
+        List<Tile> tilesPantalla = new List<Tile>();
 
         //Rastroo
         private Texture2D _texturaRastro;
@@ -69,18 +82,76 @@ namespace paniqueados2
         int LimitX = 1000;
         int LimitY = 700;
 
-
-
-        Texture2D pixel;
-
-        public bool verificarRepetido(List<Bala> listabalas, Bala balaAgregar) {
+        public bool tocandoArea(Vector2 posPlayer, List<Tile> listatiles) {
             bool res = false;
-            for(int i = 0; i < listabalas.Count; i++) {
-                if(balaAgregar.getX() == listabalas[i].getX() && balaAgregar.getY() == listabalas[i].getY()) {
-                    res = true;
+            for(int i = 0; i < listatiles.Count; i++) {
+                if (listatiles[i].getEstado() == 'C') {
+                    if (posPlayer.X == listatiles[i].getX() && posPlayer.Y == listatiles[i].getY()) {
+                        res = true; break;
+                    }
                 }
             }
             return res;
+            
+        }
+
+        public void cerrarTiles(List<Tile> listatiles) {
+            List<Tile> nuevaLista = listatiles;
+        }
+
+        public bool verificarRepetido(List<Tile> listatiles, Tile tileAgregar) {
+            bool res = false;
+            for(int i = 0; i < listatiles.Count; i++) {
+                if(tileAgregar.getX() <= (listatiles[i].getX() + 9) && tileAgregar.getX() >= (listatiles[i].getX() - 9)) {
+                    if(tileAgregar.getY() <= (listatiles[i].getY() + 9) && tileAgregar.getY() >= (listatiles[i].getY() - 9) && listatiles[i].getEstado() == 'C') { res = true;}
+                }
+
+                if(res == false) {
+                    if(tileAgregar.getX() == listatiles[i].getX() && tileAgregar.getY() == listatiles[i].getY()) res = true;
+                }
+
+            }
+
+            
+            return res;
+        }
+
+        public bool generarAreaInicial(List<Tile> listaTiles) {
+            List<Tile> nuevaLista = listaTiles;
+            bool res = true;
+            Random r = new Random();
+            int areaX, areaY;
+            int areaDescubierta = 100;
+            int randomX = r.Next(0,LimitX-20);
+            randomX = randomX - (randomX%5);
+
+            int randomY = r.Next(0,LimitY-20);
+            randomY = randomY - (randomY%5);
+
+
+
+            
+            int numRand = r.Next(2,10);
+            numRand = numRand - (numRand%2);
+            areaX = numRand;
+
+            areaY = areaDescubierta / areaX;
+            for(int j = 0; j < areaY; j++) {
+                for(int i = 0; i < areaX; i++) {
+
+                    if ((randomX + i*10) > LimitX || (randomY + j*10) > LimitY) {
+                        res = false;
+                    }
+                    else {
+                        Tile tileNuevo = new Tile((randomX + i*10), (randomY + j*10), 'C');
+                        nuevaLista.Add(tileNuevo);
+                    }
+                }
+            }
+            
+            if (res == true) { listaTiles = nuevaLista; }
+            return res;
+
         }
 
         public void LimitMap()
@@ -102,6 +173,12 @@ namespace paniqueados2
                 posicionPlayer.Y = LimitY - 10;
             }
         }
+
+
+
+        Texture2D pixel;
+
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -115,7 +192,7 @@ namespace paniqueados2
         protected override void Initialize()
         {
             posicionPlayerAnte = posicionPlayer;
-
+            
 
             historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
 
@@ -129,6 +206,7 @@ namespace paniqueados2
             _graphics.PreferredBackBufferWidth = LimitX;
             _graphics.PreferredBackBufferHeight = LimitY;
             _graphics.IsFullScreen = false;
+            
             _graphics.ApplyChanges();
             base.Initialize();
 
@@ -142,14 +220,26 @@ namespace paniqueados2
 
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            posicionPlayer = new Vector2(0, 0);
-            posicionPlayerAnte = new Vector2(0, 0);
+            bool areaGenerada = false;
+            while (!areaGenerada) {
+                areaGenerada = generarAreaInicial(tilesPantalla);
+            }
+            
+
+            if(tilesPantalla.Count > 0) {
+                posicionPlayer = new Vector2(tilesPantalla[0].getX(), tilesPantalla[0].getY());
+                posicionPlayerAnte = new Vector2(tilesPantalla[0].getX(), tilesPantalla[0].getY());
+            }
+            else {
+                posicionPlayer = new Vector2(0, 0);
+                posicionPlayerAnte = new Vector2(0, 0);
+            }
 
             font = Content.Load<SpriteFont>("File");
 
             _textura = Content.Load<Texture2D>("puntito");
             _texturaRastro = Content.Load<Texture2D>("rastro");
-
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -172,35 +262,35 @@ namespace paniqueados2
 
             _historyLine[a] = _historyLineDraw;
        
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                Disparar(balasPantalla);
-            }
-            else
-            {
 
+
+
+            if (true)
+            {
+                Trazar(tilesPantalla);
             }
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D) )
             {
 
                 posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.X += 6;
+                posicionPlayer.X += 5;
 
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.X -= 6;
+                posicionPlayer.X -= 5;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.Y -= 6;
+                posicionPlayer.Y -= 5;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S) )
             {
                 posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.Y += 6;
+                posicionPlayer.Y += 5;
             }
 
             base.Update(gameTime);
@@ -217,8 +307,14 @@ namespace paniqueados2
 
 
             _spriteBatch.Begin();
-            for(int i = 0; i < balasPantalla.Count; i++) {
-                _spriteBatch.Draw(pixel, new Rectangle(balasPantalla[i].getX(), balasPantalla[i].getY(), 10, 10), Color.Red);
+            for(int i = 0; i < tilesPantalla.Count; i++) {
+                if (tilesPantalla[i].getEstado() == 'C') {
+                    _spriteBatch.Draw(pixel, new Rectangle(tilesPantalla[i].getX(), tilesPantalla[i].getY(), 10, 10), Color.Blue);
+                }
+                else {
+                    _spriteBatch.Draw(pixel, new Rectangle(tilesPantalla[i].getX(), tilesPantalla[i].getY(), 10, 10), Color.Red);
+                }
+                
             }
             
             ///Texto
@@ -235,15 +331,18 @@ namespace paniqueados2
             base.Draw(gameTime);
         }
 
-        private void Disparar(List<Bala> balasPantalla)
+        private void Trazar(List<Tile> tilesPantalla)
         {
-            Bala balaNueva = new Bala((int) posicionPlayer.X, (int) posicionPlayer.Y);
-            if (!verificarRepetido(balasPantalla, balaNueva)) {
-                balasPantalla.Add(balaNueva);
+            Tile tileNuevo = new Tile((int) posicionPlayer.X, (int) posicionPlayer.Y, 'A');
+            if (!verificarRepetido(tilesPantalla, tileNuevo)) {
+                tilesPantalla.Add(tileNuevo);
             }
-            else {
-                
+            
+
+            if(tocandoArea(posicionPlayer, tilesPantalla)) {
+                cerrarTiles(tilesPantalla);
             }
+
         }
     }
 
