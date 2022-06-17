@@ -2,57 +2,115 @@
 using System.Collections.Generic;
 using System.Text;
 using System;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-
-
-
-
-
 namespace paniqueados2
 {
+    
+    public class Jugador {
+        Trazo trazo;
+        int posX;
+        int posY;
 
-    public class Tile {
-    int tileX;
-    int tileY;
-    char estado;
-    int ancho;
-    int alto;
-
-        public Tile(int x, int y, char s) {
-            this.tileX = x;
-            this.tileY = y;
-            this.estado = s;
+        public Jugador(Trazo t, int x, int y) {
+            this.trazo = t;
+            this.posX = x;
+            this.posY = y;
         }
 
         public int getX() {
-            return (this.tileX);
+            return this.posX;
         }
 
         public int getY() {
-            return (this.tileY);
+            return this.posY;
         }
 
-        public int getAncho() {
-            return (this.ancho);
+        public Trazo getTrazo() {
+            return this.trazo;
         }
 
-        public int getAlto() {
-            return (this.alto);
+        public void setX(int x) {
+            this.posX = x;
         }
 
-        public char getEstado() {
-            return (this.estado);
+        public void setY(int y) {
+            this.posY = y;
         }
 
-        public void cambiarEstado(char estadoNuevo) {
-            this.estado = estadoNuevo;
+
+    }
+
+    public class Tile {
+        List<int[]> puntos;
+
+        public Tile(List<int[]> origen) {
+            this.puntos = origen;
+        }
+
+        public void agregarPuntos(List<int> nuevosPuntos) {
+            
+        }
+
+        public List<int[]> getPuntos() {
+            return puntos;
         }
     }
+
+    public class Trazo {
+        string path;
+        int inicioX;
+        int inicioY;
+        
+        public Trazo() {
+            this.path = "X";
+        }
+
+        public int getX() {
+            return this.inicioX;
+        }
+
+        public int getY() {
+            return this.inicioY;
+        }
+
+        public char backtrack() {
+            int length = this.path.Length - 1;
+            char res = this.path[length];
+            if (res != 'X') { this.path = this.path.Remove(length);}
+            return(res);
+        }
+
+        public void nuevaDireccion(string dir) {
+            this.path +=  dir;
+            if (this.path.Length > 1) {
+                this.borrarRedundantes();
+            }
+        }
+
+        public void borrarRedundantes() {
+            string cadena1 = this.path;
+            string patronRegex1 = "WS|SW";
+            string patronRegex2 = "AD|DA";
+            string vacio = "";
+            cadena1 = Regex.Replace(cadena1, patronRegex1, vacio);
+            string cadenaSinRedundancia = Regex.Replace(cadena1, patronRegex2, vacio);
+            this.path = cadenaSinRedundancia;
+        }
+
+        public string getPath() {
+            return this.path;
+        }
+
+        public Tile terminarTrazo(Tile tileModificado, List<int> listaNueva) {
+            tileModificado.agregarPuntos(listaNueva);
+            return tileModificado;
+        }
+    } 
 
     public class Game1 : Game
     {
@@ -61,18 +119,15 @@ namespace paniqueados2
         private SpriteBatch _spriteBatch;
         private Texture2D _textura;
         private Rectangle _rectangule;
-        private Vector2 posicionPlayer;
-        private Vector2 posicionPlayerAnte;
+        
+        Jugador cursorJugador = new Jugador(new Trazo(), 0, 0);
+        Vector2 posicionPlayer  = new Vector2(0, 0);
 
         float time;
         int contador = 0;
         int a = 0;
 
-        historyLine[] _historyLine = new historyLine[7000];
-
-
         public List<Vector2> pixelScreen = new List<Vector2>();
-        List<Tile> tilesPantalla = new List<Tile>();
 
         //Rastroo
         private Texture2D _texturaRastro;
@@ -82,96 +137,32 @@ namespace paniqueados2
         int LimitX = 1000;
         int LimitY = 700;
 
-        public bool tocandoArea(Vector2 posPlayer, List<Tile> listatiles) {
-            bool res = false;
-            for(int i = 0; i < listatiles.Count; i++) {
-                if (listatiles[i].getEstado() == 'C') {
-                    if (posPlayer.X == listatiles[i].getX() && posPlayer.Y == listatiles[i].getY()) {
-                        res = true; break;
-                    }
-                }
-            }
-            return res;
-            
-        }
-
-        public void cerrarTiles(List<Tile> listatiles) {
-            List<Tile> nuevaLista = listatiles;
-        }
-
-        public bool verificarRepetido(List<Tile> listatiles, Tile tileAgregar) {
-            bool res = false;
-            for(int i = 0; i < listatiles.Count; i++) {
-                if(tileAgregar.getX() <= (listatiles[i].getX() + 9) && tileAgregar.getX() >= (listatiles[i].getX() - 9)) {
-                    if(tileAgregar.getY() <= (listatiles[i].getY() + 9) && tileAgregar.getY() >= (listatiles[i].getY() - 9) && listatiles[i].getEstado() == 'C') { res = true;}
-                }
-
-                if(res == false) {
-                    if(tileAgregar.getX() == listatiles[i].getX() && tileAgregar.getY() == listatiles[i].getY()) res = true;
-                }
-
-            }
-
-            
-            return res;
-        }
-
-        public bool generarAreaInicial(List<Tile> listaTiles) {
-            List<Tile> nuevaLista = listaTiles;
-            bool res = true;
-            Random r = new Random();
-            int areaX, areaY;
-            int areaDescubierta = 100;
-            int randomX = r.Next(0,LimitX-20);
-            randomX = randomX - (randomX%5);
-
-            int randomY = r.Next(0,LimitY-20);
-            randomY = randomY - (randomY%5);
-
-
-
-            
-            int numRand = r.Next(2,10);
-            numRand = numRand - (numRand%2);
-            areaX = numRand;
-
-            areaY = areaDescubierta / areaX;
-            for(int j = 0; j < areaY; j++) {
-                for(int i = 0; i < areaX; i++) {
-
-                    if ((randomX + i*10) > LimitX || (randomY + j*10) > LimitY) {
-                        res = false;
-                    }
-                    else {
-                        Tile tileNuevo = new Tile((randomX + i*10), (randomY + j*10), 'C');
-                        nuevaLista.Add(tileNuevo);
-                    }
-                }
-            }
-            
-            if (res == true) { listaTiles = nuevaLista; }
-            return res;
-
-        }
-
-        public void LimitMap()
+        public bool LimitMap()
         {
-            if (posicionPlayer.X <= 0)
+            bool res = false;
+
+            if (cursorJugador.getX() < 0)
             {
-                posicionPlayer.X = 0;
+                res = true;
+                cursorJugador.setX(0);
             }
-            if (posicionPlayer.X >= LimitX)
+            else if (cursorJugador.getX() >= LimitX)
             {
-                posicionPlayer.X = LimitX - 10;
+                res = true;
+                cursorJugador.setX(LimitX-10);
             }
-            if (posicionPlayer.Y <= 0)
+            if (cursorJugador.getY() < 0)
             {
-                posicionPlayer.Y = 0;
+                res = true;
+                cursorJugador.setY(0);
             }
-            if (posicionPlayer.Y >= LimitY)
+            else if (cursorJugador.getY() >= LimitY)
             {
-                posicionPlayer.Y = LimitY - 10;
+                res = true;
+                cursorJugador.setY(LimitY-10);
             }
+
+            return res;
         }
 
 
@@ -191,14 +182,6 @@ namespace paniqueados2
 
         protected override void Initialize()
         {
-            posicionPlayerAnte = posicionPlayer;
-            
-
-            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-
-            _historyLine[0] = _historyLineDraw;
-            _historyLine[1] = _historyLineDraw;
-
             pixelScreen.Add(posicionPlayer);
 
             pixel = new Texture2D(GraphicsDevice, 1, 1);
@@ -215,25 +198,9 @@ namespace paniqueados2
         protected override void LoadContent()
         {
             int total = LimitX * LimitY;
-
-
-
-
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            bool areaGenerada = false;
-            while (!areaGenerada) {
-                areaGenerada = generarAreaInicial(tilesPantalla);
-            }
             
 
-            if(tilesPantalla.Count > 0) {
-                posicionPlayer = new Vector2(tilesPantalla[0].getX(), tilesPantalla[0].getY());
-                posicionPlayerAnte = new Vector2(tilesPantalla[0].getX(), tilesPantalla[0].getY());
-            }
-            else {
-                posicionPlayer = new Vector2(0, 0);
-                posicionPlayerAnte = new Vector2(0, 0);
-            }
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("File");
 
@@ -245,52 +212,57 @@ namespace paniqueados2
 
         protected override void Update(GameTime gameTime)
         {
+            posicionPlayer  = new Vector2(cursorJugador.getX(), cursorJugador.getY());
             contador++;
             time = contador / 1000;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            LimitMap();
+            
 
 
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
-
-
-            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
-
-            _historyLine[a] = _historyLineDraw;
        
-
-
-
-            if (true)
-            {
-                Trazar(tilesPantalla);
-            }
-            
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D) )
             {
-
-                posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.X += 5;
+                cursorJugador.setX( cursorJugador.getX() + 10);
+                if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("D"); }
 
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.X -= 5;
+                cursorJugador.setX( cursorJugador.getX() - 10);
+                if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("A"); }
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
+            else if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.Y -= 5;
+                cursorJugador.setY( cursorJugador.getY() - 10);
+                if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("W"); }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S) )
             {
-                posicionPlayerAnte = posicionPlayer;
-                posicionPlayer.Y += 5;
+                cursorJugador.setY( cursorJugador.getY() + 10);
+                if (!LimitMap()) { cursorJugador.getTrazo().nuevaDireccion("S"); }
+            }
+
+            else if (Keyboard.GetState().IsKeyDown(Keys.Space)) {
+                char ultimaDir = cursorJugador.getTrazo().backtrack();
+                switch(ultimaDir) {
+                    case 'W' :
+                        cursorJugador.setY( cursorJugador.getY() + 10);
+                        break;
+                    case 'A' :
+                        cursorJugador.setX( cursorJugador.getX() + 10);
+                        break;
+                    case 'S' :
+                        cursorJugador.setY( cursorJugador.getY() - 10);
+                        break;
+                    case 'D' :
+                        cursorJugador.setX( cursorJugador.getX() - 10);
+                        break;
+                }
             }
 
             base.Update(gameTime);
@@ -298,32 +270,66 @@ namespace paniqueados2
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             string playerX = "";
             string playerY = "";
             Vector2 position2 = new Vector2(10, 10);
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
-
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
-            for(int i = 0; i < tilesPantalla.Count; i++) {
-                if (tilesPantalla[i].getEstado() == 'C') {
-                    _spriteBatch.Draw(pixel, new Rectangle(tilesPantalla[i].getX(), tilesPantalla[i].getY(), 10, 10), Color.Blue);
-                }
-                else {
-                    _spriteBatch.Draw(pixel, new Rectangle(tilesPantalla[i].getX(), tilesPantalla[i].getY(), 10, 10), Color.Red);
-                }
-                
-            }
+            
             
             ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
-            _spriteBatch.Draw(_textura, _rectangule, Color.White);
-            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine[a].getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + " Path:" + cursorJugador.getTrazo().getPath(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             ///PUNTO
+
+            /// TRAZADO
+            Trazo trazo = cursorJugador.getTrazo();
+            
+            
+
+
+            string camino = trazo.getPath();
+            int x = trazo.getX();
+            int y = trazo.getY();
+
+            for(int i = 0; i < camino.Length; i++) {
+                switch (camino[i]) {
+                    case 'X':
+                    break;
+
+                    case 'W':
+                        y -= 10;
+                    break;
+
+                    case 'A':
+                        x -= 10;
+                    break;
+
+                    case 'S':
+                        y += 10;
+                    break;
+
+                    case 'D':
+                        x += 10;
+                    break;
+                }
+                if(x >= LimitX) x = LimitX - 10;
+                if(y >= LimitY) y = LimitY - 10;
+                if(x <= 0) x = 0;
+                if(y <= 0) y = 0;
+                _spriteBatch.Draw(pixel, new Rectangle(x, y, 10, 10), Color.Red);
+            }
+
+            _spriteBatch.Draw(_textura, _rectangule, Color.White);
+
+
+            
+            
 
             _spriteBatch.End();
 
@@ -331,18 +337,11 @@ namespace paniqueados2
             base.Draw(gameTime);
         }
 
-        private void Trazar(List<Tile> tilesPantalla)
+        private void Trazar(Trazo trazo)
         {
-            Tile tileNuevo = new Tile((int) posicionPlayer.X, (int) posicionPlayer.Y, 'A');
-            if (!verificarRepetido(tilesPantalla, tileNuevo)) {
-                tilesPantalla.Add(tileNuevo);
-            }
             
-
-            if(tocandoArea(posicionPlayer, tilesPantalla)) {
-                cerrarTiles(tilesPantalla);
-            }
-
+            
+            
         }
     }
 
