@@ -26,7 +26,7 @@ namespace paniqueados2
         int contador = 0;
         int a = 0;
 
-        historyLine[] _historyLine = new historyLine[7000];
+        historyLine _historyLine;
 
 
         public List<Vector2> pixelScreen = new List<Vector2>();
@@ -74,13 +74,9 @@ namespace paniqueados2
 
         protected override void Initialize()
         {
-            posicionPlayerAnte = posicionPlayer;
 
 
-            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
 
-            _historyLine[0] = _historyLineDraw;
-            _historyLine[1] = _historyLineDraw;
 
             pixelScreen.Add(posicionPlayer);
 
@@ -99,8 +95,6 @@ namespace paniqueados2
             int total = LimitX * LimitY;
 
 
-
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             posicionPlayer = new Vector2(0, 0);
             posicionPlayerAnte = new Vector2(0, 0);
@@ -115,6 +109,7 @@ namespace paniqueados2
 
         protected override void Update(GameTime gameTime)
         {
+
             contador++;
             time = contador / 1000;
 
@@ -127,42 +122,34 @@ namespace paniqueados2
             _rectangule = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
             _rectanguleRastro = new Rectangle((int)posicionPlayer.X, (int)posicionPlayer.Y, 10, 10);
 
+            _historyLine = new historyLine(pixel, posicionPlayerAnte);
 
-            historyLine _historyLineDraw = new historyLine(pixel, posicionPlayerAnte);
 
-            _historyLine[a] = _historyLineDraw;
-       
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                visible = true;
-                            Disparar();
 
-            }
-            else
-            {
-                visible = false;
-
-            }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
 
                 posicionPlayerAnte = posicionPlayer;
+
                 posicionPlayer.X += 6;
 
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 posicionPlayerAnte = posicionPlayer;
+
                 posicionPlayer.X -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 posicionPlayerAnte = posicionPlayer;
+
                 posicionPlayer.Y -= 6;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
                 posicionPlayerAnte = posicionPlayer;
+
                 posicionPlayer.Y += 6;
             }
 
@@ -179,13 +166,18 @@ namespace paniqueados2
             Vector2 textMiddlePoint = font.MeasureString("text") / 2;
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(pixel, new Rectangle((int)_historyLine[a].getPosition().X, (int)_historyLine[a].getPosition().Y, 10, 10), Color.Red);
+           
+           
+                _historyLine.Draw(_spriteBatch);
+            
+
+
 
             ///Texto
             playerX = new StringBuilder().Append(posicionPlayer.X).ToString();
             playerY = new StringBuilder().Append(posicionPlayer.Y).ToString();
             _spriteBatch.Draw(_textura, _rectangule, Color.White);
-            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine[a].getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            _spriteBatch.DrawString(font, "X:" + playerX + " Y:" + playerY + "Array:" + _historyLine.getPosition(), position2, Color.White, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             ///PUNTO
 
@@ -195,27 +187,7 @@ namespace paniqueados2
             base.Draw(gameTime);
         }
 
-        private void Disparar()
-        {
-            if (visible == true)
-            {
-                if (PosBalaX <= (Window.ClientBounds.Width - _textura.Width))
-                {
-                    PosBalaX += velocidadBala;
-                }
-                else
-                {
-                    PosBalaX = (int)posicionPlayer.X;
-                    PosBalaY = (int)posicionPlayer.Y;
-                    visible = false;
-                }
-            }
-            else
-            {
-                PosBalaX = (int)posicionPlayer.X;
-                PosBalaY = (int)posicionPlayer.Y;
-            }
-        }
+
     }
 
 }

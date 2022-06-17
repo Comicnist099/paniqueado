@@ -23,7 +23,7 @@ namespace paniqueados2
 
      public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, Position, Color.Red);
+            spriteBatch.Draw(sprite, new Rectangle((int)Position.X,(int)Position.Y,10,10), Color.Red);
 
         }
 
