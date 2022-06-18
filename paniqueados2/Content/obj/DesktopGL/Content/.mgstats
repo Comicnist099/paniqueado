@@ -1,5 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/a.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/a.xnb","TextureProcessor","Texture2DContent",215782,1900357,0.301028
-"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/File.spritefont","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/File.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21538,0.1000696
-"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/puntito.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/puntito.xnb","TextureProcessor","Texture2DContent",129,149,0.0026088
-"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/rastro.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/rastro.xnb","TextureProcessor","Texture2DContent",148,149,0.0013585
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/a.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/a.xnb","TextureProcessor","Texture2DContent",215782,1900357,0.1757053
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/File.spritefont","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/File.xnb","FontDescriptionProcessor","SpriteFontContent",2068,21538,0.0802667
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/puntito.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/puntito.xnb","TextureProcessor","Texture2DContent",129,149,0.0015803
+"C:/Users/book/Downloads/paniqueado/paniqueados2/Content/rastro.png","C:/Users/book/Downloads/paniqueado/paniqueados2/Content/bin/DesktopGL/Content/rastro.xnb","TextureProcessor","Texture2DContent",148,149,0.0013664
